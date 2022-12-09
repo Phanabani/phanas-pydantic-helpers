@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "Phana's Pydantic Helpers"
+name = "phanas-pydantic-helpers"
 version = "1.0.0"  # Don't forget to update in version.py
 description = "A collection of helper functions/classes for Pydantic."
 license = "MIT"
