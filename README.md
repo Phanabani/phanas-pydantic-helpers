@@ -1,6 +1,7 @@
 # Phana's Pydantic Helpers
 
-[![release](https://img.shields.io/github/v/release/phanabani/phanas-pydantic-helpers)](https://github.com/phanabani/phanas-pydantic-helpers/releases)
+[![pypi](https://img.shields.io/pypi/v/phanas-pydantic-helpers)]()
+[![pypi-python](https://img.shields.io/pypi/pyversions/phanas-pydantic-helpers)]()
 [![license](https://img.shields.io/github/license/phanabani/phanas-pydantic-helpers)](LICENSE)
 
 A collection of helper functions/classes for Pydantic.
@@ -20,10 +21,10 @@ A collection of helper functions/classes for Pydantic.
 
 ### Install Phana's Pydantic Helpers
 
-To get started, install the repo with Poetry.
+To get started, install the package with Poetry.
 
 ```shell
-poetry add "https://github.com/phanabani/phanas-pydantic-helpers.git"
+poetry add phanas-pydantic-helpers
 ```
 
 ## Usage
