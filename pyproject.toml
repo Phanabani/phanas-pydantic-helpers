@@ -11,9 +11,13 @@ packages = [{ include = "phanas_pydantic_helpers" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+pendulum = { version = "^2.1.2", optional = true }
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+
+[tool.poetry.extras]
+pendulum = ["pendulum"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
