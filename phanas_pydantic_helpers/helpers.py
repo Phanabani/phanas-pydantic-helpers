@@ -14,7 +14,7 @@ from typing import Any, Callable, Type, TypeVar, Union
 from pydantic import BaseModel, ConfigError, root_validator, validator
 from pydantic.fields import FieldInfo
 
-from server.common.typing import (
+from phanas_pydantic_helpers.common.typing import (
     T_MaybeList,
     ensure_list,
     get_function_args_annotations,
@@ -122,6 +122,25 @@ T_Converter = Callable[[Type["FieldConverterBase"], Any], Any]
 
 
 class FieldConverter:
+    """
+    Examples:
+
+        class TimezoneField(Timezone, FieldConverter):
+            @classmethod
+            def _pyd_convert_str(cls, timezone_str: str):
+                return cls(timezone_str)
+
+            @classmethod
+            def _pyd_convert_timezone(cls, timezone: Timezone):
+                return cls(timezone.name)
+
+
+        class TimeField(pen.Time, FieldConverter):
+            @classmethod
+            def _pyd_convert(cls, time_str: str):
+                return parse_time(time_str, class_=cls)
+    """
+
     _pyd_converters: dict[type, T_Converter] = None
     _pyd_converter_prefix = "_pyd_convert"
 
