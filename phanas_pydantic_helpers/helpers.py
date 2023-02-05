@@ -14,7 +14,7 @@ from typing import Any, Callable, Type, TypeVar, Union
 from pydantic import BaseModel, ConfigError, root_validator, validator
 from pydantic.fields import FieldInfo
 
-from server.common.typing import (
+from phanas_pydantic_helpers.common.typing import (
     T_MaybeList,
     ensure_list,
     get_function_args_annotations,
@@ -122,24 +122,43 @@ T_Converter = Callable[[Type["FieldConverterBase"], Any], Any]
 
 
 class FieldConverter:
-    _pyd_converters: dict[type, T_Converter] = None
-    _pyd_converter_prefix = "_pyd_convert"
+    """
+    Examples:
+
+        class TimezoneField(Timezone, FieldConverter):
+            @classmethod
+            def _pyd_convert_str(cls, timezone_str: str):
+                return cls(timezone_str)
+
+            @classmethod
+            def _pyd_convert_timezone(cls, timezone: Timezone):
+                return cls(timezone.name)
+
+
+        class TimeField(pen.Time, FieldConverter):
+            @classmethod
+            def _pyd_convert(cls, time_str: str):
+                return parse_time(time_str, class_=cls)
+    """
+
+    __pyd_converters: dict[type, T_Converter] = None
+    __pyd_converter_prefix = "_pyd_convert"
 
     @classmethod
     def __get_validators__(cls):
-        yield cls._pyd_convert
+        yield cls.__pyd_convert
 
     @classmethod
-    def _pyd_get_converters(cls) -> dict[type, T_Converter]:
-        if cls._pyd_converters is not None:
-            return cls._pyd_converters
+    def __pyd_get_converters(cls) -> dict[type, T_Converter]:
+        if cls.__pyd_converters is not None:
+            return cls.__pyd_converters
 
         converters: dict[type, T_Converter] = {}
         for name, member in cls.__dict__.items():
             # Iterate through this class's members and find converter methods
             if not isinstance(member, classmethod):
                 continue
-            if not name.startswith(cls._pyd_converter_prefix):
+            if not name.startswith(cls.__pyd_converter_prefix):
                 continue
 
             # Check that the converter method has a single value argument and
@@ -158,12 +177,12 @@ class FieldConverter:
                 )
             converters[converter_type] = fn
 
-        cls._pyd_converters = converters
-        return cls._pyd_converters
+        cls.__pyd_converters = converters
+        return cls.__pyd_converters
 
     @classmethod
-    def _pyd_convert(cls, value):
-        converters = cls._pyd_get_converters()
+    def __pyd_convert(cls, value):
+        converters = cls.__pyd_get_converters()
         try:
             fn = converters[type(value)]
         except KeyError:
