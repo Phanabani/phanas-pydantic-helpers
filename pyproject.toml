@@ -11,10 +11,12 @@ packages = [{ include = "phanas_pydantic_helpers" }]
 
 [tool.poetry.dependencies]
 python = "^3.6"
-pendulum = { version = "^2.1.2", optional = true }
+
 pydantic = "^1.10.4"
-pytimeparse = {version = "^1.1.8", optional = true}
 typing-extensions = "^4.4.0"
+# Extra: time
+pendulum = { version = "^2.1.2", optional = true }
+pytimeparse = {version = "^1.1.8", optional = true}
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2.1"
