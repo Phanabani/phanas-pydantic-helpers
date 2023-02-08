@@ -10,6 +10,7 @@ A collection of helper functions/classes for Pydantic.
 
 - [Install](#install)
 - [Usage](#usage)
+- [Changelog](#changelog)
 - [Developers](#developers)
 - [License](#license)
 
@@ -134,6 +135,10 @@ assert create_template_from_model(GameSystem) == {
     },
 }
 ```
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
 
 ## Developers
 
