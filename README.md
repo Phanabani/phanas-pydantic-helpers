@@ -30,7 +30,7 @@ poetry add phanas-pydantic-helpers
 
 ## Usage
 
-### `Factory` and `update_forward_refs_recursive`
+### `Factory`
 
 `Factory(...)` is simply an alias for `pydantic.Field(default_factory=...).`
 
