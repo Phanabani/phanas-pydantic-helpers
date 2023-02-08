@@ -21,6 +21,7 @@
 
 - Add unit tests for `create_template_from_model`
 - Add unit tests for `FieldConverter`
+- Add GitHub action to run unit tests
 
 ## 2.0.0
 
