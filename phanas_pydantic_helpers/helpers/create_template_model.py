@@ -17,6 +17,8 @@ PLACEHOLDER_DICT_KEY_STR = "NAME"
 
 templatable_types = (list, dict, BaseModel)
 
+MISSING = object()
+
 
 def create_template_by_type(type_: type[T], field_name: str) -> T:
     if isinstance(type_, ModelMetaclass):
@@ -55,23 +57,26 @@ def create_template_model(
 
     dict_ = {}
     for field_name, field in model_type.__fields__.items():
+        type_ = annotations.get(field_name, MISSING)
         if not field.required:
             # Field is optional, so it either has a default or a default_factory
             factory = field.default_factory
-            if field_name in annotations and (
+            if type_ is not MISSING and (
                 # Only factories can be templatable types, since they're
                 # generated at runtime
                 factory in templatable_types
                 or isinstance(factory, ModelMetaclass)
             ):
                 # This default factory can be templated
-                value = create_template_by_type(annotations[field_name], field_name)
+                value = create_template_by_type(type_, field_name)
             else:
                 # We can't template this default, so just use the default as-is
                 value = factory() if factory else field.default
         else:
-            # Field is required... I actually need to fix this? lol
-            value = create_template_by_type(field.type_, field_name)
+            # Field is required
+            value = create_template_by_type(
+                type_ if type is not MISSING else field.type_, field_name
+            )
         dict_[field_name] = value
 
     return dict_
