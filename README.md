@@ -36,10 +36,9 @@ poetry add phanas-pydantic-helpers
 ```python
 from pydantic import BaseModel
 
-from phanas_pydantic_helpers import update_forward_refs_recursive, Factory
+from phanas_pydantic_helpers import Factory
 
 
-@update_forward_refs_recursive
 class Config(BaseModel):
     token: str
     
