@@ -25,6 +25,7 @@ def create_template_by_type(type_: type[T], field_name: str) -> T:
     if type_ is str:
         return field_name.upper()
 
+    # Get origin type of parameterized type
     origin_type = get_origin(type_)
 
     if origin_type is dict:
@@ -32,6 +33,7 @@ def create_template_by_type(type_: type[T], field_name: str) -> T:
         if key_type is str:
             placeholder_key = PLACEHOLDER_DICT_KEY_STR
         else:
+            # Get the default value for the key's type
             placeholder_key = key_type()
         return {placeholder_key: create_template_by_type(value_type, field_name)}
 
@@ -39,26 +41,36 @@ def create_template_by_type(type_: type[T], field_name: str) -> T:
         item_type = get_args(type_)[0]
         return [create_template_by_type(item_type, field_name)]
 
+    # Not parameterized, or some other parameterized type. Return the default
+    # value for the type
     return type_()
 
 
 def create_template_model(
     model_type: type[BaseModel] | ModelMetaclass,
 ) -> dict[str, object]:
-    dict_ = {}
     annotations = get_type_hints(
         model_type, vars(sys.modules[model_type.__module__]), vars(model_type)
     )
+
+    dict_ = {}
     for field_name, field in model_type.__fields__.items():
         if not field.required:
+            # Field is optional, so it either has a default or a default_factory
             factory = field.default_factory
             if field_name in annotations and (
-                factory in templatable_types or isinstance(factory, ModelMetaclass)
+                # Only factories can be templatable types, since they're
+                # generated at runtime
+                factory in templatable_types
+                or isinstance(factory, ModelMetaclass)
             ):
+                # This default factory can be templated
                 value = create_template_by_type(annotations[field_name], field_name)
             else:
+                # We can't template this default, so just use the default as-is
                 value = factory() if factory else field.default
         else:
+            # Field is required... I actually need to fix this? lol
             value = create_template_by_type(field.type_, field_name)
         dict_[field_name] = value
 
