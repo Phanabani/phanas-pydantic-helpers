@@ -7,7 +7,7 @@ from typing import Any, Callable, Dict, Type
 
 from phanas_pydantic_helpers.common.typing import get_function_args_annotations
 
-T_Converter = Callable[[Type["FieldConverterBase"], Any], Any]
+T_Converter = Callable[[Type["FieldConverter"], Any], Any]
 
 
 class FieldConverterError(Exception):
