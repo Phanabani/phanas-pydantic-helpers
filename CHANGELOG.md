@@ -2,8 +2,15 @@
 
 ## Table of contents
 
+- [2.0.0](#200)
 - [1.0.1](#101)
 - [1.0.0](#100)
+
+## 2.0.0
+
+- Raise Python requirement to `^3.7` (dependency compatibility issues I hadn't tested)
+- Fix parameterized types for Python `<3.9`
+- Git ignore `.python-version`
 
 ## 1.0.1
 
