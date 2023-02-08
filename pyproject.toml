@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "phanas-pydantic-helpers"
-version = "1.0.1"  # Also at version.py::__version__
+version = "2.0.0"  # Also at version.py::__version__
 description = "A collection of helper functions/classes for Pydantic."
 license = "MIT"
 authors = ["Phanabani <phanabani@gmail.com>"]
