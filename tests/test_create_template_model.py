@@ -18,6 +18,16 @@ def patch_PLACEHOLDER_DICT_KEY_STR():
         yield placeholder
 
 
+@pytest.fixture()
+def phana():
+    return "Phana"
+
+
+@pytest.fixture()
+def user_id():
+    return 123
+
+
 class TestBasic:
     def test_empty(self):
         class Model(BaseModel):
@@ -31,17 +41,17 @@ class TestBasic:
 
         assert create_template_model(Model) == {"name": patch_PLACEHOLDER_DICT_KEY_STR}
 
-    def test_value_only(self):
+    def test_value_only(self, phana):
         class Model(BaseModel):
-            name = "Phana"
+            name = phana
 
-        assert create_template_model(Model) == {"name": "Phana"}
+        assert create_template_model(Model) == {"name": phana}
 
-    def test_annotation_and_value(self):
+    def test_annotation_and_value(self, phana):
         class Model(BaseModel):
-            name: str = "Phana"
+            name: str = phana
 
-        assert create_template_model(Model) == {"name": "Phana"}
+        assert create_template_model(Model) == {"name": phana}
 
 
 class TestList:
@@ -51,17 +61,17 @@ class TestList:
 
         assert create_template_model(Model) == {"name": ["NAME"]}
 
-    def test_value_only(self):
+    def test_value_only(self, phana):
         class Model(BaseModel):
-            name = ["Phana"]
+            name = [phana]
 
-        assert create_template_model(Model) == {"name": ["Phana"]}
+        assert create_template_model(Model) == {"name": [phana]}
 
-    def test_annotation_and_value(self):
+    def test_annotation_and_value(self, phana):
         class Model(BaseModel):
-            name: List[str] = ["Phana"]
+            name: List[str] = [phana]
 
-        assert create_template_model(Model) == {"name": ["Phana"]}
+        assert create_template_model(Model) == {"name": [phana]}
 
 
 class TestDict:
@@ -77,23 +87,23 @@ class TestDict:
 
         assert create_template_model(Model) == {"id_to_name": {0: "ID_TO_NAME"}}
 
-    def test_value_only(self):
+    def test_value_only(self, phana, user_id):
         class Model(BaseModel):
-            name_to_id = {"Phana": 123}
+            name_to_id = {phana: user_id}
 
-        assert create_template_model(Model) == {"name_to_id": {"Phana": 123}}
+        assert create_template_model(Model) == {"name_to_id": {phana: user_id}}
 
-    def test_annotation_and_value_str_int(self):
+    def test_annotation_and_value_str_int(self, phana, user_id):
         class Model(BaseModel):
-            name_to_id: Dict[str, int] = {"Phana": 123}
+            name_to_id: Dict[str, int] = {phana: user_id}
 
-        assert create_template_model(Model) == {"name_to_id": {"Phana": 123}}
+        assert create_template_model(Model) == {"name_to_id": {phana: user_id}}
 
-    def test_annotation_and_value_int_str(self):
+    def test_annotation_and_value_int_str(self, phana, user_id):
         class Model(BaseModel):
-            id_to_name: Dict[int, str] = {123: "Phana"}
+            id_to_name: Dict[int, str] = {user_id: phana}
 
-        assert create_template_model(Model) == {"id_to_name": {123: "Phana"}}
+        assert create_template_model(Model) == {"id_to_name": {user_id: phana}}
 
 
 class TestModel:
