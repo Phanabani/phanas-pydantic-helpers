@@ -30,7 +30,7 @@ def test_basic_with_suffix():
 
 
 def test_multiple_converters():
-    class StrToInt(int, FieldConverter):
+    class ToInt(int, FieldConverter):
         @classmethod
         def _pyd_convert_str(cls, value: str) -> int:
             return int(value)
@@ -40,7 +40,7 @@ def test_multiple_converters():
             return int.from_bytes(value, "big")
 
     class Model(BaseModel):
-        x: StrToInt
+        x: ToInt
 
     m_str = Model(x="5")
     assert m_str.x == 5
