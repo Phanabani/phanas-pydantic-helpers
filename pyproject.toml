@@ -10,7 +10,7 @@ keywords = ["pydantic", "helper", "helpers"]
 packages = [{ include = "phanas_pydantic_helpers" }]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.7"
 
 pydantic = "^1.10.4"
 typing-extensions = "^4.4.0"
