@@ -2,9 +2,16 @@
 
 ## Table of contents
 
+- [2.1.0](#210)
 - [2.0.0](#200)
 - [1.0.1](#101)
 - [1.0.0](#100)
+
+## 2.1.0
+
+### Changes
+
+- Reorganize helpers into modules inside a `helpers` package
 
 ## 2.0.0
 
