@@ -1,12 +1,21 @@
 from typing import Dict, List
+from unittest.mock import patch
 
 from pydantic import BaseModel
 import pytest
 
 from phanas_pydantic_helpers import Factory, create_template_model
-from phanas_pydantic_helpers.helpers.create_template_model import (
-    PLACEHOLDER_DICT_KEY_STR,
-)
+from phanas_pydantic_helpers.helpers import create_template_model_module
+
+
+@pytest.fixture(autouse=True)
+def patch_PLACEHOLDER_DICT_KEY_STR():
+    with patch.object(
+        create_template_model_module,
+        "PLACEHOLDER_DICT_KEY_STR",
+        "__TESTING_PLACEHOLDER_DICT_KEY_STR__",
+    ) as placeholder:
+        yield placeholder
 
 
 class TestBasic:
@@ -16,11 +25,11 @@ class TestBasic:
 
         assert create_template_model(Model) == {}
 
-    def test_annotation_only(self):
+    def test_annotation_only(self, patch_PLACEHOLDER_DICT_KEY_STR):
         class Model(BaseModel):
             name: str
 
-        assert create_template_model(Model) == {"name": PLACEHOLDER_DICT_KEY_STR}
+        assert create_template_model(Model) == {"name": patch_PLACEHOLDER_DICT_KEY_STR}
 
     def test_value_only(self):
         class Model(BaseModel):
@@ -95,12 +104,12 @@ class TestModel:
 
         return Person
 
-    def test_annotation_only(self, person_cls):
+    def test_annotation_only(self, person_cls, patch_PLACEHOLDER_DICT_KEY_STR):
         class Model(BaseModel):
             person: person_cls
 
         assert create_template_model(Model) == {
-            "person": {"name": PLACEHOLDER_DICT_KEY_STR}
+            "person": {"name": patch_PLACEHOLDER_DICT_KEY_STR}
         }
 
     def test_value_only(self, person_cls):
