@@ -14,7 +14,7 @@ T = TypeVar("T")
 
 PLACEHOLDER_DICT_KEY_STR = "NAME"
 
-special_types = (list, dict, BaseModel)
+templatable_types = (list, dict, BaseModel)
 
 
 def create_template_by_type(type_: type[T], field_name: str) -> T:
@@ -52,7 +52,7 @@ def create_template_model(
         if not field.required:
             factory = field.default_factory
             if field_name in annotations and (
-                factory in special_types or isinstance(factory, ModelMetaclass)
+                factory in templatable_types or isinstance(factory, ModelMetaclass)
             ):
                 value = create_template_by_type(annotations[field_name], field_name)
             else:
