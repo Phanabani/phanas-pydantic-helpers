@@ -1,6 +1,8 @@
 import sys
 from types import FunctionType, MethodType
-from typing import Callable, Dict, List, Optional, TypeVar, Union, get_type_hints
+from typing import Callable, Dict, List, Optional, TypeVar, Union
+
+from typing_extensions import get_type_hints
 
 __all__ = [
     "T_MaybeList",

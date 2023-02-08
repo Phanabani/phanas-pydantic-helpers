@@ -2,9 +2,26 @@
 
 ## Table of contents
 
+- [2.1.0](#210)
 - [2.0.0](#200)
 - [1.0.1](#101)
 - [1.0.0](#100)
+
+## 2.1.0
+
+### Features
+
+- Add `create_template_from_model` to generate template dicts from models with required fields
+
+### Changes
+
+- Reorganize helpers into modules inside a `helpers` package
+
+### Code
+
+- Add unit tests for `create_template_from_model`
+- Add unit tests for `FieldConverter`
+- Add GitHub action to run unit tests
 
 ## 2.0.0
 

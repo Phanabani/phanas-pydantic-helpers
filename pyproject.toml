@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "phanas-pydantic-helpers"
-version = "2.0.0"  # Also at version.py::__version__
+version = "2.1.0"  # Also at version.py::__version__
 description = "A collection of helper functions/classes for Pydantic."
 license = "MIT"
 authors = ["Phanabani <phanabani@gmail.com>"]
@@ -15,7 +15,7 @@ python = "^3.7"
 pydantic = "^1.10.4"
 typing-extensions = "^4.4.0"
 # Extra: time
-pendulum = { version = "^2.1.2", optional = true }
+pendulum = {version = "^2.1.2", optional = true}
 pytimeparse = {version = "^1.1.8", optional = true}
 
 [tool.poetry.dev-dependencies]
@@ -23,6 +23,9 @@ pytest = "^7.2.1"
 
 [tool.poetry.extras]
 time = ["pendulum", "pytimeparse"]
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.0.243"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
