@@ -9,9 +9,17 @@
 
 ## 2.1.0
 
+### Features
+
+- Add `create_template_from_model` to generate template dicts from models with required fields
+
 ### Changes
 
 - Reorganize helpers into modules inside a `helpers` package
+
+### Code
+
+- Add unit tests for `create_template_from_model`
 
 ## 2.0.0
 
