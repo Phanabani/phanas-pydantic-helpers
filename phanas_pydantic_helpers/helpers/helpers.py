@@ -1,12 +1,9 @@
 __all__ = [
     "FieldConverterError",
     "FieldConverter",
-    "update_forward_refs_recursive",
 ]
 
-from typing import Any, Callable, Dict, Type, TypeVar
-
-from pydantic import BaseModel
+from typing import Any, Callable, Dict, Type
 
 from phanas_pydantic_helpers.common.typing import (
     get_function_args_annotations,
@@ -87,15 +84,3 @@ class FieldConverter:
         except KeyError:
             raise TypeError(f"No converter for type {type(value)}")
         return fn(cls, value)
-
-
-T_BaseModel = TypeVar("T_BaseModel", bound=Type[BaseModel])
-
-
-def update_forward_refs_recursive(model: T_BaseModel) -> T_BaseModel:
-    for name, value in model.__dict__.items():
-        if isinstance(value, type) and issubclass(value, BaseModel):
-            update_forward_refs_recursive(value)
-
-    model.update_forward_refs(**model.__dict__)
-    return model
