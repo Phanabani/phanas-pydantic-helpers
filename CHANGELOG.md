@@ -20,6 +20,7 @@
 ### Code
 
 - Add unit tests for `create_template_from_model`
+- Add unit tests for `FieldConverter`
 
 ## 2.0.0
 
