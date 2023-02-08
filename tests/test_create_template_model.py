@@ -4,7 +4,10 @@ from unittest.mock import patch
 from pydantic import BaseModel
 import pytest
 
-from phanas_pydantic_helpers import Factory, create_template_model
+from phanas_pydantic_helpers import (
+    Factory,
+    create_template_model,
+)
 from phanas_pydantic_helpers.helpers import create_template_model_module
 
 
@@ -148,3 +151,36 @@ class TestModelWithDefault:
             person: person_cls = Factory(person_cls)
 
         assert create_template_model(Model) == {"person": {"name": phana}}
+
+
+def test_complex(patch_PLACEHOLDER_DICT_KEY_STR):
+    class Player(BaseModel):
+        name: str
+        admin = False
+        highest_score: float = 1.0
+        extra_data: Dict[str, str]
+
+    class PlayerDatabase(BaseModel):
+        version: int
+        players: List[Player]
+
+    class GameSystem(BaseModel):
+        system_name = "PhanaBox"
+        games: List[str]
+        player_database: PlayerDatabase = Factory(PlayerDatabase)
+
+    assert create_template_model(GameSystem) == {
+        "system_name": "PhanaBox",
+        "games": ["GAMES"],
+        "player_database": {
+            "version": 0,
+            "players": [
+                {
+                    "name": "NAME",
+                    "admin": False,
+                    "highest_score": 1.0,
+                    "extra_data": {patch_PLACEHOLDER_DICT_KEY_STR: "EXTRA_DATA"},
+                }
+            ],
+        },
+    }
