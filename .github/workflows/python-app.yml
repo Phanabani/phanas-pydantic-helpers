@@ -31,7 +31,7 @@ jobs:
         
         pipx install poetry
         
-        if [ -f poetry.lock ]; then poetry install --no-root; fi
+        poetry install --no-root
 
     - name: Lint with ruff
       run: |
