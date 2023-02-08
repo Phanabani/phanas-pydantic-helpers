@@ -31,6 +31,8 @@ poetry add phanas-pydantic-helpers
 
 ### `Factory` and `update_forward_refs_recursive`
 
+`Factory(...)` is simply an alias for `pydantic.Field(default_factory=...).`
+
 ```python
 from pydantic import BaseModel
 
@@ -38,17 +40,19 @@ from phanas_pydantic_helpers import update_forward_refs_recursive, Factory
 
 
 @update_forward_refs_recursive
-class MyModel(BaseModel):
-    hi: str = "there"
+class Config(BaseModel):
+    token: str
+    
+    class _ExtraInfo(BaseModel):
+        name: str = "Unnamed"
+        description: str = "Empty description"
 
-    class _Friend(BaseModel):
-        whats: str = "up?"
-
-    friend: _Friend = Factory(_Friend)
+    extra_info: _ExtraInfo = Factory(_ExtraInfo)
 
 
-model = MyModel()
-assert model.friend.whats == "up?"
+model = Config(token="bleh")
+assert model.extra_info.name == "Unnamed"
+model.extra_info.description = "A more detailed description"
 ```
 
 ## Developers
