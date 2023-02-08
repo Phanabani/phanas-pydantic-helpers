@@ -9,7 +9,7 @@ __all__ = [
 ]
 
 from pathlib import Path
-from typing import Any, Callable, Type, TypeVar, Union
+from typing import Any, Callable, Dict, List, Type, TypeVar, Union
 
 from pydantic import BaseModel, ConfigError, root_validator, validator
 from pydantic.fields import FieldInfo
@@ -28,7 +28,7 @@ class Factory(FieldInfo):
         super().__init__(*args, default_factory=default_factory, **kwargs)
 
 
-def instance_list_factory(class_: Type[V], *args, **kwargs) -> Callable[[], list[V]]:
+def instance_list_factory(class_: Type[V], *args, **kwargs) -> Callable[[], List[V]]:
     def make_list():
         return [class_(*args, **kwargs)]
 
@@ -49,7 +49,7 @@ def maybe_relative_path(fields: T_MaybeList[str], root_path: Path):
 
 
 def only_one_of(
-    *groups_of_fields: T_MaybeList[str], need_all: Union[bool, list[bool]] = True
+    *groups_of_fields: T_MaybeList[str], need_all: Union[bool, List[bool]] = True
 ):
     """
     A Pydantic root validator that ensures one and only one of the groups of
@@ -73,7 +73,7 @@ def only_one_of(
     for idx, group in enumerate(groups_of_fields):
         groups_of_fields[idx] = ensure_list(group)
 
-    def validate_fn(cls, values: dict[str, Any]):
+    def validate_fn(cls, values: Dict[str, Any]):
         a_group_succeeded = False
 
         for idx, group in enumerate(groups_of_fields):
@@ -141,7 +141,7 @@ class FieldConverter:
                 return parse_time(time_str, class_=cls)
     """
 
-    __pyd_converters: dict[type, T_Converter] = None
+    __pyd_converters: Dict[type, T_Converter] = None
     __pyd_converter_prefix = "_pyd_convert"
 
     @classmethod
@@ -149,11 +149,11 @@ class FieldConverter:
         yield cls.__pyd_convert
 
     @classmethod
-    def __pyd_get_converters(cls) -> dict[type, T_Converter]:
+    def __pyd_get_converters(cls) -> Dict[type, T_Converter]:
         if cls.__pyd_converters is not None:
             return cls.__pyd_converters
 
-        converters: dict[type, T_Converter] = {}
+        converters: Dict[type, T_Converter] = {}
         for name, member in cls.__dict__.items():
             # Iterate through this class's members and find converter methods
             if not isinstance(member, classmethod):

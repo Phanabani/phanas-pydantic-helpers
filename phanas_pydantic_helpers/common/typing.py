@@ -1,6 +1,6 @@
 import sys
 from types import FunctionType, MethodType
-from typing import Callable, Optional, TypeVar, Union, get_type_hints
+from typing import Callable, Dict, List, Optional, TypeVar, Union, get_type_hints
 
 __all__ = [
     "T_MaybeList",
@@ -12,10 +12,10 @@ __all__ = [
 ]
 
 V = TypeVar("V")
-T_MaybeList = Union[V, list[V]]
+T_MaybeList = Union[V, List[V]]
 
 
-def ensure_list(value_or_list: T_MaybeList[V]) -> list[V]:
+def ensure_list(value_or_list: T_MaybeList[V]) -> List[V]:
     if not isinstance(value_or_list, list):
         return [value_or_list]
     return value_or_list
@@ -38,7 +38,7 @@ def get_function_annotations(f: T_Functionish):
     )
 
 
-def get_function_args_annotations(f: T_Functionish) -> dict[str, type]:
+def get_function_args_annotations(f: T_Functionish) -> Dict[str, type]:
     annotations = get_function_annotations(f)
     try:
         del annotations["return"]
