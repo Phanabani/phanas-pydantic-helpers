@@ -6,7 +6,7 @@ import pytest
 
 from phanas_pydantic_helpers import (
     Factory,
-    create_template_model,
+    create_template_from_model,
 )
 from phanas_pydantic_helpers.helpers import create_template_model_module
 
@@ -36,25 +36,25 @@ class TestBasic:
         class Model(BaseModel):
             pass
 
-        assert create_template_model(Model) == {}
+        assert create_template_from_model(Model) == {}
 
     def test_annotation_only(self):
         class Model(BaseModel):
             name: str
 
-        assert create_template_model(Model) == {"name": "NAME"}
+        assert create_template_from_model(Model) == {"name": "NAME"}
 
     def test_value_only(self, phana):
         class Model(BaseModel):
             name = phana
 
-        assert create_template_model(Model) == {"name": phana}
+        assert create_template_from_model(Model) == {"name": phana}
 
     def test_annotation_and_value(self, phana):
         class Model(BaseModel):
             name: str = phana
 
-        assert create_template_model(Model) == {"name": phana}
+        assert create_template_from_model(Model) == {"name": phana}
 
 
 class TestList:
@@ -62,19 +62,19 @@ class TestList:
         class Model(BaseModel):
             name: List[str]
 
-        assert create_template_model(Model) == {"name": ["NAME"]}
+        assert create_template_from_model(Model) == {"name": ["NAME"]}
 
     def test_value_only(self, phana):
         class Model(BaseModel):
             name = [phana]
 
-        assert create_template_model(Model) == {"name": [phana]}
+        assert create_template_from_model(Model) == {"name": [phana]}
 
     def test_annotation_and_value(self, phana):
         class Model(BaseModel):
             name: List[str] = [phana]
 
-        assert create_template_model(Model) == {"name": [phana]}
+        assert create_template_from_model(Model) == {"name": [phana]}
 
 
 class TestDict:
@@ -82,7 +82,7 @@ class TestDict:
         class Model(BaseModel):
             name_to_id: Dict[str, int]
 
-        assert create_template_model(Model) == {
+        assert create_template_from_model(Model) == {
             "name_to_id": {patch_PLACEHOLDER_DICT_KEY_STR: 0}
         }
 
@@ -90,25 +90,25 @@ class TestDict:
         class Model(BaseModel):
             id_to_name: Dict[int, str]
 
-        assert create_template_model(Model) == {"id_to_name": {0: "ID_TO_NAME"}}
+        assert create_template_from_model(Model) == {"id_to_name": {0: "ID_TO_NAME"}}
 
     def test_value_only(self, phana, user_id):
         class Model(BaseModel):
             name_to_id = {phana: user_id}
 
-        assert create_template_model(Model) == {"name_to_id": {phana: user_id}}
+        assert create_template_from_model(Model) == {"name_to_id": {phana: user_id}}
 
     def test_annotation_and_value_str_int(self, phana, user_id):
         class Model(BaseModel):
             name_to_id: Dict[str, int] = {phana: user_id}
 
-        assert create_template_model(Model) == {"name_to_id": {phana: user_id}}
+        assert create_template_from_model(Model) == {"name_to_id": {phana: user_id}}
 
     def test_annotation_and_value_int_str(self, phana, user_id):
         class Model(BaseModel):
             id_to_name: Dict[int, str] = {user_id: phana}
 
-        assert create_template_model(Model) == {"id_to_name": {user_id: phana}}
+        assert create_template_from_model(Model) == {"id_to_name": {user_id: phana}}
 
 
 class TestModelNoDefault:
@@ -123,13 +123,13 @@ class TestModelNoDefault:
         class Model(BaseModel):
             person: person_cls
 
-        assert create_template_model(Model) == {"person": {"name": "NAME"}}
+        assert create_template_from_model(Model) == {"person": {"name": "NAME"}}
 
     def test_annotation_and_value(self, person_cls):
         class Model(BaseModel):
             person: person_cls = Factory(person_cls)
 
-        assert create_template_model(Model) == {"person": {"name": "NAME"}}
+        assert create_template_from_model(Model) == {"person": {"name": "NAME"}}
 
 
 class TestModelWithDefault:
@@ -144,13 +144,13 @@ class TestModelWithDefault:
         class Model(BaseModel):
             person: person_cls
 
-        assert create_template_model(Model) == {"person": {"name": phana}}
+        assert create_template_from_model(Model) == {"person": {"name": phana}}
 
     def test_annotation_and_value(self, person_cls, phana):
         class Model(BaseModel):
             person: person_cls = Factory(person_cls)
 
-        assert create_template_model(Model) == {"person": {"name": phana}}
+        assert create_template_from_model(Model) == {"person": {"name": phana}}
 
 
 def test_complex(patch_PLACEHOLDER_DICT_KEY_STR):
@@ -169,7 +169,7 @@ def test_complex(patch_PLACEHOLDER_DICT_KEY_STR):
         games: List[str]
         player_database: PlayerDatabase = Factory(PlayerDatabase)
 
-    assert create_template_model(GameSystem) == {
+    assert create_template_from_model(GameSystem) == {
         "system_name": "PhanaBox",
         "games": ["GAMES"],
         "player_database": {
