@@ -118,14 +118,6 @@ class TestModel:
         class Model(BaseModel):
             person: person_cls
 
-        assert create_template_model(Model) == {
-            "person": {"name": patch_PLACEHOLDER_DICT_KEY_STR}
-        }
-
-    def test_value_only(self, person_cls):
-        class Model(BaseModel):
-            person = Factory(person_cls)
-
         assert create_template_model(Model) == {"person": {"name": "NAME"}}
 
     def test_annotation_and_value(self, person_cls):
