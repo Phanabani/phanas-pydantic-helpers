@@ -34,14 +34,16 @@ from pydantic import BaseModel
 
 from phanas_pydantic_helpers import update_forward_refs_recursive, Factory
 
+
 @update_forward_refs_recursive
 class MyModel(BaseModel):
-  hi: str = "there"
-  
-  class _Friend(BaseModel):
-    whats: str = "up?"
-    
-  friend: _Friend = Factory(_Friend)
+    hi: str = "there"
+
+    class _Friend(BaseModel):
+        whats: str = "up?"
+
+    friend: _Friend = Factory(_Friend)
+
 
 model = MyModel()
 assert model.friend.whats == "up?"
