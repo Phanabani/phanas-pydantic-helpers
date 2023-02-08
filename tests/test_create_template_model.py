@@ -35,11 +35,11 @@ class TestBasic:
 
         assert create_template_model(Model) == {}
 
-    def test_annotation_only(self, patch_PLACEHOLDER_DICT_KEY_STR):
+    def test_annotation_only(self):
         class Model(BaseModel):
             name: str
 
-        assert create_template_model(Model) == {"name": patch_PLACEHOLDER_DICT_KEY_STR}
+        assert create_template_model(Model) == {"name": "NAME"}
 
     def test_value_only(self, phana):
         class Model(BaseModel):
@@ -75,11 +75,13 @@ class TestList:
 
 
 class TestDict:
-    def test_annotation_only_str_int(self):
+    def test_annotation_only_str_int(self, patch_PLACEHOLDER_DICT_KEY_STR):
         class Model(BaseModel):
             name_to_id: Dict[str, int]
 
-        assert create_template_model(Model) == {"name_to_id": {"NAME_TO_ID": 0}}
+        assert create_template_model(Model) == {
+            "name_to_id": {patch_PLACEHOLDER_DICT_KEY_STR: 0}
+        }
 
     def test_annotation_only_int_str(self):
         class Model(BaseModel):
