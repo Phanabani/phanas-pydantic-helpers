@@ -3,12 +3,13 @@ from __future__ import annotations
 __all__ = ["create_template_model"]
 
 import sys
-from typing import TypeVar, get_args, get_origin, get_type_hints
+from typing import TypeVar, get_type_hints
 
 from pydantic import BaseModel
 
 # noinspection PyProtectedMember
 from pydantic.main import ModelMetaclass
+from typing_extensions import get_args, get_origin
 
 T = TypeVar("T")
 
