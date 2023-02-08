@@ -106,7 +106,7 @@ class TestDict:
         assert create_template_model(Model) == {"id_to_name": {user_id: phana}}
 
 
-class TestModel:
+class TestModelNoDefault:
     @pytest.fixture()
     def person_cls(self):
         class Person(BaseModel):
@@ -125,3 +125,24 @@ class TestModel:
             person: person_cls = Factory(person_cls)
 
         assert create_template_model(Model) == {"person": {"name": "NAME"}}
+
+
+class TestModelWithDefault:
+    @pytest.fixture()
+    def person_cls(self, phana):
+        class Person(BaseModel):
+            name: str = phana
+
+        return Person
+
+    def test_annotation_only(self, person_cls, phana):
+        class Model(BaseModel):
+            person: person_cls
+
+        assert create_template_model(Model) == {"person": {"name": phana}}
+
+    def test_annotation_and_value(self, person_cls, phana):
+        class Model(BaseModel):
+            person: person_cls = Factory(person_cls)
+
+        assert create_template_model(Model) == {"person": {"name": phana}}
