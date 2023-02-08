@@ -1,6 +1,4 @@
 __all__ = [
-    "Factory",
-    "instance_list_factory",
     "maybe_relative_path",
     "only_one_of",
     "FieldConverterError",
@@ -12,27 +10,12 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Type, TypeVar, Union
 
 from pydantic import BaseModel, ConfigError, root_validator, validator
-from pydantic.fields import FieldInfo
 
 from phanas_pydantic_helpers.common.typing import (
     T_MaybeList,
     ensure_list,
     get_function_args_annotations,
 )
-
-V = TypeVar("V")
-
-
-class Factory(FieldInfo):
-    def __init__(self, default_factory, *args, **kwargs):
-        super().__init__(*args, default_factory=default_factory, **kwargs)
-
-
-def instance_list_factory(class_: Type[V], *args, **kwargs) -> Callable[[], List[V]]:
-    def make_list():
-        return [class_(*args, **kwargs)]
-
-    return make_list
 
 
 def maybe_relative_path(fields: T_MaybeList[str], root_path: Path):
