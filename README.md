@@ -29,6 +29,8 @@ poetry add phanas-pydantic-helpers
 
 ## Usage
 
+### `Factory` and `update_forward_refs_recursive`
+
 ```python
 from pydantic import BaseModel
 
