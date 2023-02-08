@@ -13,7 +13,7 @@ from typing_extensions import get_args, get_origin
 
 T = TypeVar("T")
 
-PLACEHOLDER_DICT_KEY_STR = "NAME"
+PLACEHOLDER_DICT_KEY_STR = "KEY_NAME"
 
 templatable_types = (list, dict, BaseModel)
 
