@@ -58,6 +58,7 @@ def create_template_model(
     dict_ = {}
     for field_name, field in model_type.__fields__.items():
         type_ = annotations.get(field_name, MISSING)
+
         if not field.required:
             # Field is optional, so it either has a default or a default_factory
             factory = field.default_factory
@@ -72,11 +73,13 @@ def create_template_model(
             else:
                 # We can't template this default, so just use the default as-is
                 value = factory() if factory else field.default
+
         else:
             # Field is required
             value = create_template_by_type(
                 type_ if type is not MISSING else field.type_, field_name
             )
+
         dict_[field_name] = value
 
     return dict_
