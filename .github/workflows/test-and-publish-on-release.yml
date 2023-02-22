@@ -5,7 +5,8 @@ on:
     types: [released]
 
 jobs:
+  run_tests:
+    uses: ./.github/workflows/run-tests.yml
   publish:
-    steps:
-      - uses: ./.github/workflows/run-tests.yml
-      - uses: ./.github/workflows/publish-with-poetry.yml
+    uses: ./.github/workflows/publish-with-poetry.yml
+    needs: [run_tests]
