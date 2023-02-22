@@ -1,0 +1,7 @@
+name: Run tests on repo activity
+
+on: [push, pull_request]
+
+jobs:
+  run_tests:
+    uses: ./.github/workflows/reusable/run-tests.yml
