@@ -1,4 +1,4 @@
-name: Build with Poetry
+name: Publish with Poetry
 
 on: [workflow_call]
 
