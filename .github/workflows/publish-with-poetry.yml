@@ -3,7 +3,7 @@ name: Publish with Poetry
 on: [workflow_call]
 
 jobs:
-  run_tests:
+  publish_with_poetry:
 
     runs-on: ubuntu-latest
 
