@@ -26,13 +26,8 @@ jobs:
         
         poetry install --no-root --no-dev
 
-    - name: Build with Poetry
+    - name: Publish with Poetry
+      env:
+        PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
       run: |
-        poetry build
-
-    - name: Archive build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: python-build
-        path: dist
-        retention-days: 1
+        poetry publish --build -u __token__ -p $PYPI_TOKEN
