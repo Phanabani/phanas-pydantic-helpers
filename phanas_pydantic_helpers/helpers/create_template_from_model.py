@@ -11,6 +11,12 @@ from pydantic import BaseModel
 from pydantic.main import ModelMetaclass
 from typing_extensions import get_args, get_origin
 
+from phanas_pydantic_helpers.common.typing import get_function_args_annotations
+from phanas_pydantic_helpers.helpers.field_converter import (
+    FieldConverter,
+    CONVERTER_METHOD_PREFIX,
+)
+
 T = TypeVar("T")
 
 PLACEHOLDER_DICT_KEY_STR = "KEY_NAME"
@@ -23,6 +29,27 @@ MISSING = object()
 def create_template_from_type(type_: type[T], field_name: str) -> T:
     if isinstance(type_, ModelMetaclass):
         return create_template_from_model(type_)
+
+    if type(type_) is type and issubclass(type_, FieldConverter):
+        converters = (
+            (getattr(type_, attr))
+            for attr in vars(type_).keys()
+            if attr.startswith(CONVERTER_METHOD_PREFIX)
+        )
+        # We're going to get ONLY the first converter's value type
+        try:
+            first_converter_type = get_function_args_annotations(next(converters))[
+                "value"
+            ]
+        except StopIteration:
+            raise ValueError(
+                f'FieldConverter named "{field_name}" has no converter methods'
+            )
+        return create_template_from_type(
+            # Avoid useless type error
+            first_converter_type,  # noqa
+            field_name,
+        )
 
     if type_ is str:
         return field_name.upper()
