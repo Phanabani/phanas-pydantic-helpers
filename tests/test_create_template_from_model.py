@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Any, Dict, List
 from unittest.mock import patch
 
 from pydantic import BaseModel
@@ -6,6 +6,7 @@ import pytest
 
 from phanas_pydantic_helpers import (
     Factory,
+    FieldConverter,
     create_template_from_model,
 )
 from phanas_pydantic_helpers.helpers import create_template_model_module
@@ -184,3 +185,58 @@ def test_complex(patch_PLACEHOLDER_DICT_KEY_STR):
             ],
         },
     }
+
+
+class TestFieldConverter:
+    def test_str(self):
+        class Container:
+            def __init__(self, value: Any):
+                self.value = value
+
+        class StrToContainer(Container, FieldConverter):
+            @classmethod
+            def _pyd_convert(cls, value: str):
+                return cls(value)
+
+        class Model(BaseModel):
+            str_to_container: StrToContainer
+
+        assert create_template_from_model(Model) == {
+            "str_to_container": "STR_TO_CONTAINER"
+        }
+
+    def test_int(self):
+        class Container:
+            def __init__(self, value: Any):
+                self.value = value
+
+        class IntToContainer(Container, FieldConverter):
+            @classmethod
+            def _pyd_convert(cls, value: int):
+                return cls(value)
+
+        class Model(BaseModel):
+            int_to_container: IntToContainer
+
+        assert create_template_from_model(Model) == {"int_to_container": 0}
+
+    def test_gets_type_of_first_converter_only(self):
+        class Container:
+            def __init__(self, value: Any):
+                self.value = value
+
+        class ToContainer(Container, FieldConverter):
+            # Ensuring that alphabetical order doesn't matter, only definition
+            # order
+            @classmethod
+            def _pyd_convert_b_int(cls, value: int):
+                return cls(value)
+
+            @classmethod
+            def _pyd_convert_a_str(cls, value: str):
+                return cls(value)
+
+        class Model(BaseModel):
+            to_container: ToContainer
+
+        assert create_template_from_model(Model) == {"to_container": 0}
