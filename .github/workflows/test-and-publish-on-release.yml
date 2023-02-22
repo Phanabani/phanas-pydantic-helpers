@@ -10,3 +10,5 @@ jobs:
   publish:
     uses: ./.github/workflows/publish-with-poetry.yml
     needs: [run_tests]
+    secrets:
+      PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}

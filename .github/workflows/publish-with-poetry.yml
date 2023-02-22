@@ -4,8 +4,8 @@ on: [workflow_call]
 
 jobs:
   publish_with_poetry:
-
     runs-on: ubuntu-latest
+    secrets: inherit
 
     steps:
     - uses: actions/checkout@v3
