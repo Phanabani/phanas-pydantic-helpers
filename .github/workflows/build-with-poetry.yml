@@ -1,0 +1,38 @@
+name: Build with Poetry
+
+on: [workflow_call]
+
+jobs:
+  run_tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        
+        python -m pip install --user pipx
+        python -m pipx ensurepath
+        
+        pipx install poetry
+        
+        poetry install --no-root --no-dev
+
+    - name: Build with Poetry
+      run: |
+        poetry build
+
+    - name: Archive build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: python-build
+        path: dist
+        retention-days: 1
