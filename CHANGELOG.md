@@ -14,6 +14,10 @@
 
 - Fix `FieldConverter`s not being handled correctly in `create_template_from_model`
 
+### Code
+
+- Add GitHub action to automatically publish to PyPI
+
 ## 2.1.0
 
 ### Features

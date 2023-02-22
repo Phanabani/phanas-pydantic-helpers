@@ -1,0 +1,11 @@
+name: Test and publish the repo to PyPI on release
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  publish:
+    steps:
+      - uses: ./.github/workflows/run-tests.yml
+      - uses: ./.github/workflows/publish-with-poetry.yml
