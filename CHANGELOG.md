@@ -2,10 +2,17 @@
 
 ## Table of contents
 
+- [2.1.1](#211)
 - [2.1.0](#210)
 - [2.0.0](#200)
 - [1.0.1](#101)
 - [1.0.0](#100)
+
+## 2.1.1
+
+### Fixes
+
+- Fix `FieldConverter`s not being handled correctly in `create_template_from_model`
 
 ## 2.1.0
 
