@@ -1,4 +1,5 @@
 __all__ = [
+    "CONVERTER_METHOD_PREFIX",
     "FieldConverterError",
     "FieldConverter",
 ]
@@ -6,6 +7,8 @@ __all__ = [
 from typing import Any, Callable, Dict, Type
 
 from phanas_pydantic_helpers.common.typing import get_function_args_annotations
+
+CONVERTER_METHOD_PREFIX = "_pyd_convert"
 
 T_Converter = Callable[[Type["FieldConverter"], Any], Any]
 
@@ -35,7 +38,6 @@ class FieldConverter:
     """
 
     __pyd_converters: Dict[type, T_Converter] = None
-    __pyd_converter_prefix = "_pyd_convert"
 
     @classmethod
     def __get_validators__(cls):
@@ -51,7 +53,7 @@ class FieldConverter:
             # Iterate through this class's members and find converter methods
             if not isinstance(member, classmethod):
                 continue
-            if not name.startswith(cls.__pyd_converter_prefix):
+            if not name.startswith(CONVERTER_METHOD_PREFIX):
                 continue
 
             # Check that the converter method has a single value argument and
