@@ -14,6 +14,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    # Waiting for this issue to be fixed:
+    # https://github.com/actions/setup-python/issues/369
     - name: Cache Poetry
       id: cache-poetry
       uses: actions/cache@v3
@@ -25,22 +32,26 @@ jobs:
         key: >
           ${{ runner.os }}-${{ env.cache-name }}
 
-    # Waiting for this issue to be fixed:
-    # https://github.com/actions/setup-python/issues/369
+    - name: Cache Poetry packages
+      id: cache-poetry-packages
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-poetry-packages
+      with:
+        path: |
+          ~/.cache/pypoetry
+        key: >
+          ${{ runner.os }}-${{ env.cache-name }}-${{ env.PYTHON_VERSION }}
+          -${{ hashFiles('**/pyproject.toml') }}
+
     - if: ${{ steps.cache-poetry.outputs.cache-hit != 'true' }}
       name: Install Poetry
       run: |
         curl -sSL https://install.python-poetry.org | python3 -
         echo "PATH=${HOME}/.poetry/bin:${PATH}" >> $GITHUB_ENV
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: "poetry"
-        cache-dependency-path: pyproject.toml
-
-    - name: Install dependencies
+    - if: ${{ steps.cache-poetry-packages.outputs.cache-hit != 'true' }}
+      name: Install dependencies
       run: |
         poetry install --no-root
 
