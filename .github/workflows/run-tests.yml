@@ -21,7 +21,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ env.PYTHON_VERSION }}
+        python-version: ${{ matrix.python-version }}
 
     # Waiting for this issue to be fixed:
     # https://github.com/actions/setup-python/issues/369
