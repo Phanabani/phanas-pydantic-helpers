@@ -1,6 +1,10 @@
 name: Publish with Poetry
 
-on: [workflow_call]
+on:
+  workflow_call:
+    secrets:
+      PYPI_TOKEN:
+        required: true
 
 env:
   PYTHON_VERSION: "3.11"
