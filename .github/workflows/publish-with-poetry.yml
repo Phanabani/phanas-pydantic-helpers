@@ -13,22 +13,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
+    - uses: ./.github/workflows/install-python-and-poetry.yml
       with:
         python-version: ${{ env.PYTHON_VERSION }}
-        cache: "poetry"
 
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        
-        python -m pip install --user pipx
-        python -m pipx ensurepath
-        
-        pipx install poetry
-        
-        poetry install --no-root --no-dev
+      run: poetry install --no-root --no-dev
 
     - name: Publish with Poetry
       env:
