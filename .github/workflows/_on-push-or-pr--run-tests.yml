@@ -1,4 +1,4 @@
-name: Run tests on repo activity
+name: On push or PR, run tests
 
 on: [push, pull_request]
 

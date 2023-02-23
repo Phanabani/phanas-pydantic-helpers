@@ -1,4 +1,4 @@
-name: Test and publish the repo to PyPI on release
+name: On release, test and publish the repo to PyPI
 
 on:
   release:
