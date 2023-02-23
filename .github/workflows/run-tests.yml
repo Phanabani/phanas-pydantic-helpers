@@ -24,7 +24,6 @@ jobs:
           ~/.local/share/pypoetry
         key: >
           ${{ runner.os }}-${{ env.cache-name }}
-          -${{ hashFiles('~/.local/share/pypoetry/VERSION') }}
 
     # Waiting for this issue to be fixed:
     # https://github.com/actions/setup-python/issues/369
