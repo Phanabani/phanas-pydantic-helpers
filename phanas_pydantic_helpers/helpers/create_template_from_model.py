@@ -30,7 +30,10 @@ def create_template_from_type(type_: type[T], field_name: str) -> T:
     if isinstance(type_, ModelMetaclass):
         return create_template_from_model(type_)
 
-    if type(type_) is type and issubclass(type_, FieldConverter):
+    # If a class inherits a `typing.Protocol`, its type will not be `type`
+    # like expected, and `issubclass` will not be able to be run on it. We can
+    # search for FieldConverter in __mro__ instead.
+    if hasattr(type_, "__mro__") and FieldConverter in type_.__mro__:
         converters = (
             (getattr(type_, attr))
             for attr in vars(type_).keys()

@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from pydantic import BaseModel
 import pytest
+from typing_extensions import Protocol
 
 from phanas_pydantic_helpers import (
     Factory,
@@ -240,3 +241,21 @@ class TestFieldConverter:
             to_container: ToContainer
 
         assert create_template_from_model(Model) == {"to_container": 0}
+
+    def test_mro(self):
+        class ContainerProto(Protocol):
+            value: int
+
+        class Container(ContainerProto):
+            def __init__(self, value: int):
+                self.value = value
+
+        class IntToContainerProtoImpl(Container, FieldConverter):
+            @classmethod
+            def _pyd_convert(cls, value: int):
+                return cls(value)
+
+        class Model(BaseModel):
+            int_to_container_proto_impl: IntToContainerProtoImpl
+
+        assert create_template_from_model(Model) == {"int_to_container_proto_impl": 0}
