@@ -41,9 +41,9 @@ def create_template_from_type(type_: type[T], field_name: str) -> T:
         )
         # We're going to get ONLY the first converter's value type
         try:
-            first_converter_type = get_function_args_annotations(next(converters))[
-                "value"
-            ]
+            first_converter_type = list(
+                get_function_args_annotations(next(converters)).values()
+            )[0]
         except StopIteration:
             raise ValueError(
                 f'FieldConverter named "{field_name}" has no converter methods'
