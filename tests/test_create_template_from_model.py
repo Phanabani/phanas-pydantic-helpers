@@ -221,6 +221,21 @@ class TestFieldConverter:
 
         assert create_template_from_model(Model) == {"int_to_container": 0}
 
+    def test_allow_any_arg_name(self):
+        class Container:
+            def __init__(self, _testing_arg_name_: Any):
+                self._testing_arg_name_ = _testing_arg_name_
+
+        class IntToContainer(Container, FieldConverter):
+            @classmethod
+            def _pyd_convert(cls, _testing_arg_name_: int):
+                return cls(_testing_arg_name_)
+
+        class Model(BaseModel):
+            int_to_container: IntToContainer
+
+        assert create_template_from_model(Model) == {"int_to_container": 0}
+
     def test_gets_type_of_first_converter_only(self):
         class Container:
             def __init__(self, value: Any):
