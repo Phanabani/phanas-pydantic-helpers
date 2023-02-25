@@ -2,12 +2,19 @@
 
 ## Table of contents
 
+- [2.1.3](#213)
 - [2.1.2](#212)
 - [2.1.1](#211)
 - [2.1.0](#210)
 - [2.0.0](#200)
 - [1.0.1](#101)
 - [1.0.0](#100)
+
+## 2.1.3
+
+### Fixes
+
+- Fix `FieldConverter` argument name being assumed in `create_template_from_model`
 
 ## 2.1.2
 
